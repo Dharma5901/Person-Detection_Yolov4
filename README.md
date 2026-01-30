@@ -1,186 +1,160 @@
-# Person Detection – Video Analytics (YOLO + OpenCV)
+# Person Detection – Video Analytics
 
-This project is a **person detection system** built using **YOLO (Darknet)** and **OpenCV (DNN module)**. It connects to multiple RTSP cameras, detects people in live video streams, draws bounding boxes with labels, and saves images in a **camera‑wise and date‑wise folder structure**. The system also supports **daily rotating logs** and uses **Singapore time (Asia/Singapore)** consistently across logs and saved files.
-
----
-
-## 🚀 Features
-
-* ✅ Multi‑camera RTSP support
-* ✅ Person detection using YOLO (Darknet weights + cfg)
-* ✅ Camera‑wise & date‑wise image storage
-* ✅ Save **with bounding box** and **without bounding box** images
-* ✅ Object label loaded directly from `classes.names`
-* ✅ Confidence score displayed on bounding box
-* ✅ Frame‑interval based detection control
-* ✅ Singapore timezone (UTC +08:00)
-* ✅ Daily rotating log files (file + terminal)
-* ✅ Auto camera reconnect on failure
+This project is a **real‑time multi‑camera person detection system** built using **OpenCV + YOLO**. It connects to one or more RTSP cameras, detects people, draws bounding boxes with labels and confidence, and saves results in a **clean, date‑wise and camera‑wise folder structure**. The system is designed to be **production‑ready**, with robust logging, reconnection handling, and Docker support.
 
 ---
 
-## 📁 Project Structure
+## 🚀 Key Features
+
+* ✅ **Multi‑camera support** (RTSP streams)
+* ✅ **YOLO‑based person detection**
+* ✅ **Bounding box + label + confidence overlay**
+* ✅ **Singapore Time (Asia/Singapore)** for timestamps
+* ✅ **Date‑wise & camera‑wise image storage**
+* ✅ **With box / Without box image saving**
+* ✅ **Frame‑interval based detection control**
+* ✅ **Daily rotating log files** (terminal + file)
+* ✅ **Auto camera reconnection** on failure
+* ✅ **Docker & Docker‑Compose support**
+
+---
+
+## 📂 Project Structure
 
 ```
 person_detection_v4/
 ├── main.py
 ├── config.json
 ├── requirements.txt
-├── Dockerfile
-├── docker-compose.yml
 ├── Makefile
+├── Dockerfile
+├── install.Dockerfile
+├── docker-compose.yml
 ├── logs/
 │   └── detections.log
-├── detected_objects/
-│   ├── Front/
-│   │   └── 2026-01-30/
-│   │       ├── with box/
-│   │       └── without box/
-│   └── Back/
-│       └── 2026-01-30/
-│           ├── with box/
-│           └── without box/
-└── model_jan_28/
-    ├── ipr_270126_best.weights
-    ├── ipr_270126.cfg
-    └── class_ids.names
+└── detected_objects/
+    ├── Front/
+    │   └── 2026-01-30/
+    │       ├── with box/
+    │       └── without box/
+    └── Back/
+        └── 2026-01-30/
+            ├── with box/
+            └── without box/
+```
+---
+
+## 🧠 Detection Logic
+
+* Frames are continuously read from each camera
+* Detection runs every **N frames** (`detection_frame_interval`)
+* YOLO detects objects
+* Only the configured `target_class` (default: `person`) is processed
+* Bounding boxes are filtered using **confidence threshold + NMS**
+
+---
+
+## 🖼️ Output Format
+
+For every detection:
+
+* **Without box** → original frame saved
+* **With box** → bounding box + label + confidence drawn
+
+Label is automatically read from `classes.names`.
+
+Example overlay:
+
+```
+person 0.87
 ```
 
 ---
 
-## ⚙️ Requirements
+## 📝 Logging
 
-### System
+* Logs are written to **terminal + file**
+* **Daily rotating logs** using `TimedRotatingFileHandler`
+* Old logs automatically cleaned (configurable via `backupCount`)
 
-* Python **3.6+**
-* Linux (recommended)
-* RTSP enabled cameras
+Example log:
 
-### Python Packages
+```
+2026-01-30 14:32:10 | INFO | person detected in Front (0.92)
+```
 
-Install dependencies using:
+---
+
+## ▶️ How to Run (Local)
+
+### 1. Install dependencies
 
 ```bash
 pip3 install -r requirements.txt
 ```
 
-`requirements.txt`
-
-```
-opencv-python-headless==4.9.0.80
-numpy
-pytz
-```
-
----
-
-## 🛠 Configuration (`config.json`)
-
-Key configuration options:
-
-* **detected_objects** – base folder for saving images
-* **log_file_path** – path for log file
-* **model** – YOLO model paths and target class
-* **camera** – multiple RTSP camera configurations
-* **detection_frame_interval** – process every Nth frame
-
-Example:
-
-```json
-"detected_objects": "detected_objects",
-"log_file_path": "logs/detections.log",
-"detection_frame_interval": 10
-```
-
----
-
-## ▶️ Running the Application
+### 2. Run application
 
 ```bash
 python3 main.py --config_file config.json
 ```
 
-> Make sure the `logs/` directory is writable.
+Press `q` to exit if `show_video` is enabled.
 
 ---
 
-## 🕒 Timezone Handling
+## 🐳 Docker Support
 
-* All timestamps (logs, folder names, image names) use:
-
-  ```
-  Asia/Singapore (UTC +08:00)
-  ```
-* Implemented using `pytz` for Python < 3.9 compatibility.
-
----
-
-## 🖼 Output Details
-
-Each detected person generates:
-
-* 📷 **Raw image** (without bounding box)
-* 📦 **Annotated image** (with bounding box, label, confidence)
-
-Label is read directly from `class_ids.names`.
-
----
-
-## 📜 Logging
-
-* Logs are written to **file + terminal**
-* Daily rotation at midnight
-* Keeps last **7 days** of logs
-
-Example log:
-
-```
-2026-01-30 14:22:10 | INFO | person detected in Front (0.87)
-```
-
----
-
-## 🧩 Docker Support
-
-Build and run using Docker:
+### Build image
 
 ```bash
 docker build -t person-detection .
-docker run --rm person-detection
 ```
 
-Or using docker‑compose:
+### Run with docker‑compose
 
 ```bash
-docker-compose up --build
+docker-compose up -d
 ```
 
 ---
 
-## 🔒 Notes & Best Practices
+## 🛠 Requirements
 
-* Avoid running as `sudo`
-* Ensure RTSP URLs are reachable
-* Ensure log and output folders have write permissions
-* Use `opencv-python-headless` for server environments
+* Python 3.7+
+* OpenCV
+* NumPy
+* pytz
+* RTSP‑enabled IP cameras
+
+See `requirements.txt` for exact versions.
 
 ---
 
-## 📌 Future Enhancements
+## 🔒 Production Notes
+
+* Avoid running as `sudo`
+* Ensure `logs/` and `detected_objects/` are writable
+* Use strong RTSP credentials
+* Prefer `opencv-python-headless` for servers
+
+---
+
+## 🚧 Future Enhancements
 
 * ⏱ Time‑based detection instead of frame‑based
-* 🎨 Per‑class colors
+* 🎨 Different colors per class
+* 📊 Detection metrics export (CSV / JSON)
 * 🧵 Multi‑threaded camera processing
-* 📊 CSV / JSON detection reports
 * 🧹 Auto‑cleanup old images
+* ☁️ Cloud upload support
 
 ---
 
 ## 👨‍💻 Author
 
-**Dharmaraj B**
-Person Detection Application
+Built and maintained as a **real‑world CCTV video analytics system**.
 
 ---
 
-If you need this README converted to **Tamil**, **Markdown + PDF**, or **company‑branded format**, just tell me 👍
+✅ **This README reflects the full current project accurately.**
