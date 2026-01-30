@@ -1,0 +1,55 @@
+{
+  "site_name": "nyp",
+
+  "detected_objects": "detected_objects",
+  "log_file_path": "detections.log",
+
+  "show_video": false,
+  "fps": 10,
+
+  "model": {
+    "weight_path": "model_jan_28/ipr_270126_best.weights",
+    "config_path": "model_jan_28/ipr_270126.cfg",
+    "classes_path": "model_jan_28/class_ids.names",
+    "model_size": 416,
+    "target_class": "person"
+  },
+
+  "detection_settings": {
+    "confidence_threshold": 0.5,
+    "nms_threshold": 0.4,
+    "save_interval_sec": 2
+  },
+
+  "camera": {
+    "Front": {
+      "url": "rtsp://admin:Greenbotz@1211@172.16.1.53/cam/realmonitor?channel=1&subtype=0",
+      "width": 1280,
+      "height": 720,
+      "fps": 10,
+      "enabled": true
+    },
+    "Back": {
+      "url": "rtsp://admin:Greenbotz@1211@172.16.1.54/cam/realmonitor?channel=1&subtype=0",
+      "width": 1280,
+      "height": 720,
+      "fps": 10,
+      "enabled": true
+    }
+  },
+
+  "display_settings": {
+    "box_color": [0, 255, 0],
+    "text_color": [255, 255, 255],
+    "box_thickness": 2,
+    "text_size": 0.6
+  },
+
+  "runtime": {
+    "save_with_bbox": true,
+    "save_without_bbox": true,
+    "draw_confidence": true
+  },
+
+  "detection_frame_interval": 10
+}

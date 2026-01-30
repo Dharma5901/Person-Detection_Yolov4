@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  person_detection:
+    container_name: ${condo}
+    restart: always
+
+    build:
+      context: ./
+      dockerfile: Dockerfile
+
+    image: ${residency_name}
+
+    volumes:
+      - ./:/app
+
+    network_mode: host
+
+    command: python3 main.py --config_file config.json
