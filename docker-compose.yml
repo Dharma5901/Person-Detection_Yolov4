@@ -3,7 +3,11 @@ version: '2'
 services:
   person_detection:
     container_name: ${condo}
+<<<<<<< HEAD
     restart: always
+=======
+    restart: "no"
+>>>>>>> 2483e5f (Developed code)
 
     build:
       context: ./

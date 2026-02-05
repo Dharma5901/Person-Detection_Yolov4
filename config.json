@@ -1,5 +1,6 @@
 {
   "site_name": "nyp",
+<<<<<<< HEAD
 
   "detected_objects": "detected_objects",
   "log_file_path": "detections.log",
@@ -24,19 +25,59 @@
   "camera": {
     "Front": {
       "url": "rtsp://admin:Greenbotz@1211@172.16.1.53/cam/realmonitor?channel=1&subtype=0",
+=======
+  "detected_objects": "output_images",
+  "log_file_path": "detections.log",
+  "show_video": false,
+  "fps": 10,
+  "model": {
+    "weight_path": "",
+    "config_path": "",
+    "classes_path": "",
+    "model_size": 416,
+    "target_class": "person"
+  },
+  "detection_settings": {
+    "confidence_threshold": 0.7,
+    "nms_threshold": 0.4,
+    "save_interval_sec": 2
+  },
+  "camera": {
+    "Front": {
+      "url": "",
+      "width": 1280,
+      "height": 720,
+      "fps": 10,
+      "enabled": true
+    },
+    "Right": {
+      "url": "",
+>>>>>>> 2483e5f (Developed code)
       "width": 1280,
       "height": 720,
       "fps": 10,
       "enabled": true
     },
     "Back": {
+<<<<<<< HEAD
       "url": "rtsp://admin:Greenbotz@1211@172.16.1.54/cam/realmonitor?channel=1&subtype=0",
+=======
+      "url": "",
+      "width": 1280,
+      "height": 720,
+      "fps": 10,
+      "enabled": true
+    },
+    "Left": {
+      "url": "",
+>>>>>>> 2483e5f (Developed code)
       "width": 1280,
       "height": 720,
       "fps": 10,
       "enabled": true
     }
   },
+<<<<<<< HEAD
 
   "display_settings": {
     "box_color": [0, 255, 0],
@@ -45,11 +86,30 @@
     "text_size": 0.6
   },
 
+=======
+  "display_settings": {
+    "box_color": [
+      0,
+      255,
+      0
+    ],
+    "text_color": [
+      255,
+      255,
+      255
+    ],
+    "box_thickness": 2,
+    "text_size": 0.6
+  },
+>>>>>>> 2483e5f (Developed code)
   "runtime": {
     "save_with_bbox": true,
     "save_without_bbox": true,
     "draw_confidence": true
   },
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2483e5f (Developed code)
   "detection_frame_interval": 10
 }
